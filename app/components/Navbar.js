@@ -1,39 +1,185 @@
-import React from 'react'
+// app/components/Navbar.js
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Sparkles, ArrowRight, Menu, X, Layers, Compass, HelpCircle, Palette } from "lucide-react";
 
 const Navbar = () => {
-    return (
-        <div className=" bg-white fixed text-black w-full flex items-center justify-between px-6 py-4 rounded-full mt-12 ">
+  const pathname = usePathname();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-            {/* Logo */}
-            <div className="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 494.1 100" role="img" aria-label="Linktree" width="118" height="28" class="block h-auto w-full max-sm:hidden text-black"><path fill="currentColor" d="M0 10.7h14.2v74.5h39.3v13.1H0V10.7zm67.5 0c4.8 0 8.9 3.7 8.9 8.6 0 4.9-4 8.8-8.9 8.8s-8.9-3.9-8.9-8.8c0-4.8 3.9-8.6 8.9-8.6zm-7 24.5h13.6v63.2H60.5V35.2zm21.7 0h13.6v8.7c4-6.7 10.9-10.4 20.1-10.4 14.8 0 24 11.5 24 29.7v35.1h-13.6V64.5c0-11.8-5.2-18.5-14.5-18.5-10.3 0-15.9 7-15.9 19.6v32.7H82.2V35.2zm64.9-24.5h13.6v55.4l25.4-30.9h17.1l-27.1 31.6 27.1 31.5h-17.1l-25.4-30.8v30.8h-13.6V10.7zm61.5 8.4h13.9v16.1h16.2v11.3h-16.2V79c0 4.1 2.5 6.7 6.5 6.7h9.1v12.7h-10.9c-11.8 0-18.5-7-18.5-19.4l-.1-59.9zm37 16.1h12.6V43c3.4-6 9-9.5 15.9-9.5 2.1 0 3.2.1 4.8.6v12.6c-.9-.2-2.3-.5-5.1-.5-10 0-15.5 8.4-15.5 22.8v29.2h-13.6v-63h.9zm65.2-1.7c15 0 31.3 9 31.3 34.7V70h-48.8c1.1 11.3 7.6 17.5 18.6 17.5 7.9 0 14.5-4.2 16-10.1h13.9c-1.5 12.6-14.7 22.6-30 22.6-19.6 0-32-12.7-32-33.3 0-18.3 11.9-33.2 31-33.2zm16.7 25.3c-1.9-7.8-8.1-12.7-16.7-12.7-8.3 0-14.2 5-16.5 12.7h33.2zm51.6-25.3c15 0 31.3 9 31.3 34.7V70h-48.8c1.1 11.3 7.6 17.5 18.6 17.5 7.9 0 14.5-4.2 16-10.1H410C408.6 90 395.4 100 380.1 100c-19.6 0-32-12.7-32-33.3 0-18.3 11.9-33.2 31-33.2zm16.7 25.3c-1.9-7.8-8.1-12.7-16.8-12.7-8.3 0-14.2 5-16.5 12.7h33.3zm17.9-25.5H438l-17.3-16.4 9.5-9.7L446.7 24V0H461v24l16.5-16.8 9.5 9.7-17.3 16.4H494v13.6h-24.5L487 63.7l-9.5 9.5-23.7-23.7-23.7 23.7-9.5-9.5L438 46.8h-24.5V33.3h.2zm33.1 32.9h14.3v32.2h-14.3V66.2z"></path></svg>
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Show navbar on landing and generate pages
+  const isProfilePage = pathname && pathname !== "/" && pathname !== "/generate";
+  if (isProfilePage) {
+    return null; // Public link bio profiles have their own full-screen immersive design
+  }
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-40 flex justify-center px-4 pt-4 sm:pt-6 transition-all duration-300">
+      <nav
+        className={`w-full max-w-6xl mx-auto flex items-center justify-between px-5 py-3 rounded-full transition-all duration-300 ${
+          isScrolled
+            ? "glass-nav shadow-[0_10px_30px_rgba(0,0,0,0.5)] border-white/15"
+            : "bg-slate-900/60 backdrop-blur-md border border-white/10"
+        }`}
+      >
+        {/* Brand Logo */}
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-fuchsia-500 p-0.5 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.4)] group-hover:shadow-[0_0_25px_rgba(6,182,212,0.7)] transition-all transform group-hover:scale-105">
+            <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+              <Sparkles size={18} className="text-cyan-400 group-hover:rotate-12 transition-transform" />
             </div>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-extrabold text-lg tracking-tight text-white flex items-center gap-1">
+              BitTree
+              <span className="text-[10px] uppercase font-mono px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                PRO
+              </span>
+            </span>
+          </div>
+        </Link>
 
-            {/* Navigation Links */}
-            <ul className="flex gap-6 text-black font-medium">
-                <li className="cursor-pointer ">template</li>
-                <li className="cursor-pointer ">Discover</li>
-                <li className="cursor-pointer ">Pricing</li>
-                <li className="cursor-pointer ">Contact</li>
-            </ul>
-            <div className='justify-center items-center  text-center'>
-                <div className="flex gap-4">
-                    <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">
-                        Sign Up
-                    </button>
-                    <button className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition">
-                        Login
-                    </button>
-                </div>
+        {/* Desktop Navigation Links */}
+        <ul className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
+          <li>
+            <Link
+              href="/#features"
+              className="hover:text-cyan-400 transition-colors flex items-center gap-1.5"
+            >
+              <Layers size={14} className="text-cyan-400/70" />
+              Features
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/#themes"
+              className="hover:text-purple-400 transition-colors flex items-center gap-1.5"
+            >
+              <Palette size={14} className="text-purple-400/70" />
+              Themes
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/#showcase"
+              className="hover:text-pink-400 transition-colors flex items-center gap-1.5"
+            >
+              <Compass size={14} className="text-pink-400/70" />
+              Showcase
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/#faq"
+              className="hover:text-amber-400 transition-colors flex items-center gap-1.5"
+            >
+              <HelpCircle size={14} className="text-amber-400/70" />
+              FAQ
+            </Link>
+          </li>
+        </ul>
 
-            </div>
-
+        {/* Action Button */}
+        <div className="hidden sm:flex items-center gap-3">
+          {pathname !== "/generate" ? (
+            <Link
+              href="/generate"
+              className="relative group px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold text-slate-950 bg-gradient-to-r from-cyan-400 via-sky-300 to-cyan-300 hover:from-cyan-300 hover:to-white shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_28px_rgba(6,182,212,0.7)] transition-all transform hover:scale-102 flex items-center gap-2"
+            >
+              <span>Claim Handle</span>
+              <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          ) : (
+            <Link
+              href="/"
+              className="px-4 py-2 rounded-full text-xs font-semibold text-slate-300 bg-slate-800/80 hover:bg-slate-750 border border-slate-700 transition-colors"
+            >
+              Back to Home
+            </Link>
+          )}
         </div>
-    )
-}
 
-export default Navbar
+        {/* Mobile Menu Toggle Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden p-2 rounded-xl text-slate-300 hover:text-white bg-slate-800/60 border border-slate-700/60"
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </nav>
 
+      {/* Mobile Menu Drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed top-20 left-4 right-4 bg-slate-900/95 backdrop-blur-2xl border border-white/15 rounded-3xl p-6 shadow-2xl z-50 flex flex-col gap-4 animate-in fade-in slide-in-from-top-4 duration-200">
+          <ul className="flex flex-col gap-3 font-medium text-slate-200 text-sm">
+            <li>
+              <Link
+                href="/#features"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-800 transition"
+              >
+                <Layers size={16} className="text-cyan-400" />
+                Features
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/#themes"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-800 transition"
+              >
+                <Palette size={16} className="text-purple-400" />
+                Themes
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/#showcase"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-800 transition"
+              >
+                <Compass size={16} className="text-pink-400" />
+                Showcase
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/#faq"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 p-2 rounded-xl hover:bg-slate-800 transition"
+              >
+                <HelpCircle size={16} className="text-amber-400" />
+                FAQ
+              </Link>
+            </li>
+          </ul>
 
+          <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
+            <Link
+              href="/generate"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-3 rounded-2xl text-center text-sm font-bold text-slate-950 bg-gradient-to-r from-cyan-400 to-blue-400 shadow-[0_0_20px_rgba(6,182,212,0.4)]"
+            >
+              Claim Your Handle
+            </Link>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
 
-
+export default Navbar;
